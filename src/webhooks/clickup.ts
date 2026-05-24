@@ -43,7 +43,8 @@ type WebhookEvent =
   | 'taskAssigneeUpdated'
   | 'taskStatusUpdated'
   | 'taskPriorityUpdated'
-  | 'taskDueDateUpdated';
+  | 'taskDueDateUpdated'
+  | 'taskMoved';
 
 interface WebhookPayload {
   event: WebhookEvent;
@@ -86,7 +87,8 @@ async function processEvent(payload: WebhookPayload): Promise<void> {
 
     case 'taskUpdated':
     case 'taskPriorityUpdated':
-    case 'taskDueDateUpdated': {
+    case 'taskDueDateUpdated':
+    case 'taskMoved': {
       if (mapping) {
         await updateTask(task, mapping);
       } else if (isAssignedToUser(task)) {

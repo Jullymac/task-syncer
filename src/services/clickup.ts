@@ -36,6 +36,7 @@ export interface ClickUpTask {
 export interface ClickUpWebhook {
   id: string;
   endpoint: string;
+  events: string[];
 }
 
 const CLICKUP_BUFFER_MS = 2 * 60 * 1000;
@@ -102,6 +103,14 @@ export const clickupClient = {
     }
   },
 
+  async updateWebhook(id: string, events: string[]): Promise<void> {
+    try {
+      await http.put(`/webhook/${id}`, { events });
+    } catch (err) {
+      handleError(err);
+    }
+  },
+
   async registerWebhook(): Promise<ClickUpWebhook> {
     try {
       const { data } = await http.post<{ webhook: ClickUpWebhook }>(
@@ -116,6 +125,7 @@ export const clickupClient = {
             'taskStatusUpdated',
             'taskPriorityUpdated',
             'taskDueDateUpdated',
+            'taskMoved',
           ],
         }
       );

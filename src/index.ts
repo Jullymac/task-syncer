@@ -14,18 +14,36 @@ import { logger } from './utils/logger';
 // Webhook registration
 // ---------------------------------------------------------------------------
 
+const REQUIRED_WEBHOOK_EVENTS = [
+  'taskCreated',
+  'taskUpdated',
+  'taskDeleted',
+  'taskAssigneeUpdated',
+  'taskStatusUpdated',
+  'taskPriorityUpdated',
+  'taskDueDateUpdated',
+  'taskMoved',
+];
+
 async function ensureWebhookRegistered(): Promise<void> {
   const expectedEndpoint = `${config.PUBLIC_URL}/webhook/clickup`;
   const webhooks = await clickupClient.listWebhooks();
-  const exists = webhooks.some((w) => w.endpoint === expectedEndpoint);
+  const existing = webhooks.find((w) => w.endpoint === expectedEndpoint);
 
-  if (exists) {
-    logger.info('ClickUp webhook already registered');
+  if (!existing) {
+    const webhook = await clickupClient.registerWebhook();
+    logger.info('ClickUp webhook registered', { id: webhook.id, endpoint: expectedEndpoint });
     return;
   }
 
-  const webhook = await clickupClient.registerWebhook();
-  logger.info('ClickUp webhook registered', { id: webhook.id, endpoint: expectedEndpoint });
+  const missingEvents = REQUIRED_WEBHOOK_EVENTS.filter((e) => !existing.events.includes(e));
+  if (missingEvents.length > 0) {
+    await clickupClient.updateWebhook(existing.id, REQUIRED_WEBHOOK_EVENTS);
+    logger.info('ClickUp webhook updated with missing events', { id: existing.id, missingEvents });
+    return;
+  }
+
+  logger.info('ClickUp webhook already registered', { id: existing.id });
 }
 
 // ---------------------------------------------------------------------------
