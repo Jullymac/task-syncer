@@ -1,0 +1,11 @@
+process.env.CLICKUP_API_TOKEN = 'test-token';
+process.env.CLICKUP_WORKSPACE_ID = 'ws-1';
+process.env.CLICKUP_USER_ID = '42';
+process.env.TODOIST_API_TOKEN = 'test-token';
+process.env.TODOIST_SYNC_PROJECT_ID = 'proj-sync';
+process.env.TODOIST_SYNC_PROJECT_NAME = 'Test Project';
+process.env.TODOIST_ERROR_PROJECT_ID = 'proj-error';
+process.env.TODOIST_ERROR_PROJECT_NAME = 'Inbox';
+process.env.DATABASE_URL = 'postgresql://localhost/test';
+process.env.WEBHOOK_SECRET = 'test-secret';
+process.env.PUBLIC_URL = 'https://example.com';
