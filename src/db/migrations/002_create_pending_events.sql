@@ -1,6 +1,6 @@
-CREATE TYPE IF NOT EXISTS pending_event_type AS ENUM ('webhook', 'job_initial', 'job_reconciliation');
-CREATE TYPE IF NOT EXISTS pending_event_operation AS ENUM ('create', 'update', 'complete', 'delete');
-CREATE TYPE IF NOT EXISTS pending_event_status AS ENUM ('pending', 'processing', 'failed');
+DO $$ BEGIN CREATE TYPE pending_event_type AS ENUM ('webhook', 'job_initial', 'job_reconciliation'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE pending_event_operation AS ENUM ('create', 'update', 'complete', 'delete'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE pending_event_status AS ENUM ('pending', 'processing', 'failed'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 CREATE TABLE IF NOT EXISTS pending_events (
   id               UUID PRIMARY KEY DEFAULT gen_random_uuid(),

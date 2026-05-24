@@ -1,5 +1,5 @@
-CREATE TYPE IF NOT EXISTS job_type AS ENUM ('initial', 'reconciliation');
-CREATE TYPE IF NOT EXISTS job_status AS ENUM ('running', 'paused', 'done', 'failed');
+DO $$ BEGIN CREATE TYPE job_type AS ENUM ('initial', 'reconciliation'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
+DO $$ BEGIN CREATE TYPE job_status AS ENUM ('running', 'paused', 'done', 'failed'); EXCEPTION WHEN duplicate_object THEN NULL; END $$;
 
 CREATE TABLE IF NOT EXISTS job_state (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
