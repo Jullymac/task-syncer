@@ -60,6 +60,10 @@ async function start(): Promise<void> {
   // for any future JSON routes
   app.use(express.json());
 
+  app.get('/', (_req, res) => {
+    res.send('hello world');
+  });
+
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok' });
   });
