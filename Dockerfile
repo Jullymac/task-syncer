@@ -21,8 +21,6 @@ RUN npm ci --omit=dev
 # compiled JS
 COPY --from=builder /app/dist ./dist
 
-# SQL migrations are not copied by tsc — must be added explicitly
-COPY src/db/migrations ./dist/db/migrations
 
 EXPOSE 3100
 
